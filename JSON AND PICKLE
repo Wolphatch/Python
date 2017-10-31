@@ -1,0 +1,38 @@
+def login():
+    print("hello")
+
+f=open("user_acc.txt","wb")
+info={
+    "alex":"123",
+    "jack":"444",
+
+     }
+print(pickle.dumps(info))
+#f.write(pickle.dumps(info))
+pickle.dump(info,f) #f指将序列化的对象放入f，info指文件中要序列化的对象，这和上面一行功能一
+f.close()   #写入
+
+
+
+#需要解决的问题是，如果在两台不同的机器上，序列化个人读取序列化
+#而info必须转化为字符串或者二进制代码才能被硬盘记录，拷贝到序列化个人
+#但info如果转化为字符串，则其字典的类型会消失
+#这里有两个序列化模块解决此问题：
+#1：json模块用于字符串和Python数据类型之间的转换
+#2：pickle模块用于python特有的类型和python的数据类型间进行转换
+#Json功能：dumps，dump，loads，load. dumps用于写入 loads用于读取
+#pickle：dumps，dump，loads，load
+
+#json 在写入的时候写入的是字符串，因此在open时要用w，读取的时候用r
+#而pickle使用的是二进制代码，所以写入时要用wb，读取时用rb，同时pickle只支持两台都使用python的计算机进行
+#数据转换和传输
+
+独处：
+
+import pickle
+
+f=open("user_acc.txt","rb")
+data_from_atm=pickle.loads(f.read())#读
+#或者 data_from_atm=pickle.load(f)  有同样的效果
+print(data_from_atm)
+f.close()
