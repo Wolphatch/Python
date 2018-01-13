@@ -1,0 +1,47 @@
+暴力法
+#输入一个整形数组，求数组中连续的子数组使其和最大。
+
+
+x=0
+y=0
+max=0
+cur_sum=0
+array=[-5,-1,2,3,7,-8,-1]
+n=len(array)
+for i in range(0,n):
+      cur_sum=0      #每一次都要清0，因为子数组的起始位置（i）已经改变
+      for j in range(i+1,n):
+          cur_sum+=array[j]       #内层：将array的项按照序号，每次循环加一个
+          if cur_sum > max:       #内层：每次循环都会出现一个cur_sum，最大的才会被赋值为max
+             max=cur_sum           #内层：在出现最大的cur_sum后，赋值给max，并记录此时的i,j
+             x=i
+             y=j
+          print(i,j,cur_sum)
+print(x,y,max)
+
+
+分治法：
+
+
+def maxaddsub(fro,to,a):
+    if to==fro:
+        return a[fro]
+    middle=(fro+to)//2
+    m1=maxaddsub(fro,middle,a)
+    m2=maxaddsub(middle+1,to,a)
+    left=a[middle]
+    now=a[middle]
+    for i in range(middle,fro,-1):
+        now+=a[i]
+        left=max(now,left)
+    right=a[middle+1]
+    now=a[middle+1]
+    for i in range(middle+1,to,1):
+        now+=a[i]
+        right=max(now,right)
+    m3=left+right
+    return max(m1,m2,m3)
+
+array=[-5,-1,2,3,7,-8,-1]
+b=maxaddsub(0,len(array)-1,array)
+print(b)
