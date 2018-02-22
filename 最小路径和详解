@@ -1,0 +1,45 @@
+#最小路径和算法
+#假设有3*4的矩阵arr
+#arr[2][3](即最后一个数，python中的列表从第0个开始）的最小路径一定为 min(arr[1][3]最小路径和，arr[2][2]的最小路径和)加上其本身，记为dp[2][3]=min（dp[1][3],dp[2][2])+arr[2][3]
+#题目简化为求dp[1][3]，dp[2][2]的最小路径
+#在此规则下，我们要求每一个数的dp，所以在循环的时候可以直接计算每一个数，从上至下，从左至右。
+#在此规则下，可以发现，第一行或者第一列每一个数的dp都是左面或者右边数之和，所以在n*m的矩阵中，如果i或者j=0，我们可以直接加上左边或者上面那个数的dp。
+# 即：
+#                if i==0 and j!=0:
+#                    arr[i][j] += arr[i][j-1]
+#                elif j==0 and i!=0:
+#                    arr[i][j] += arr[i-1][j]
+#在这个算法中，由于我们的顺序从第一列开始（即i=0,j变化），程序会先将arr[0][0]与arr[0][1]相加，并赋值给arr[0][1].此时arr[0][1]就是dp[0][1]。
+#在完成第一列之后，第二列第一个（arr[1][0]）满足elif的条件，会与arr[0][0]相加，使得第二列第一个自身变为其dp。dp[1][0]
+#接下来程序走到第二列第二个，我们可以发现，其左边和上面已经是最小路径和了（即dp[0][1]（备注第十二行出现）和dp[1][0](备注第十三行出现））。此时代码：
+#                elif j!=0 and i!=0:
+#                    grid[i][j] += min(grid[i-1][j] , grid[i][j-1])
+# 生效。
+#如此循环下去，每一个数都会被赋值为其最小路径和与其自身的和，成为一个新的dp。直到最后一个数。
+#全部代码如下，grid用于代替arr
+
+
+
+
+
+def minPathSum(grid=[]):
+        # write your code here
+        grid=[[3, 1, 2], [1, 5, 2], [1, 3, 1], [7, 1, 4]]
+        m = len(grid)
+        if m == 0:
+            return 0
+        n = len(grid[0])
+        if n==0:
+            return 0
+        for i in range(m):
+            for j in range(n):
+                if i==0 and j!=0:
+                    grid[i][j] += grid[i][j-1]
+                elif j==0 and i!=0:
+                    grid[i][j] += grid[i-1][j]
+                elif j!=0 and i!=0:
+                    grid[i][j] += min(grid[i-1][j] , grid[i][j-1])
+                print(grid[i][j])
+        return grid[m-1][n-1]
+
+print(minPathSum())
