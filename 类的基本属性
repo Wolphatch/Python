@@ -1,0 +1,137 @@
+#被继承的类为基类，继承的类叫子类
+#类继承有三种方式：
+# 1、实现继承：使用基类的属性和方法而无须额编码的能力
+# 2、接口继承：仅使用属性和方法的名称，但是子类必须提供实现的能力
+#3、可视继承：子窗体和基窗体的外观和实现代码的能力
+
+#类之间要继承的话必须是从属关系，Employee类和manager类从属于Person类，但是Leg类只能
+#从属于manager和employee类，不能继承Person类
+
+
+'''
+class Person(object):
+    def __init__(self,name,sex):
+        self.name=name
+        self.sex=sex                             #类
+    def print_title(self):
+        if self.sex=='male':
+            print('male')
+        elif self.sex=='female':
+            print("female")
+class Child(Person):       #Child 继承父类Person
+    pass
+
+May=Child("May","female")
+Peter=Person("Peter",'male')
+
+print(May.name,May.sex,Peter.name,Peter.sex) #子类继承父类的方法和属性
+May.print_title()  #May作为Child类，可以使用父类中的print_title()方法
+Peter.print_title()
+'''
+
+
+#继承有什么好处？最大的好处是子类获得了父类的全部属性及功能。如下 Child 类就可以直接使用父类的 print_title() 方法
+#实例化Child的时候，子类继承了父类的构造函数，就需要提供父类Person要求的两个属性变量 name 及 sex
+#Python拥有可以判断是否继承的函数，isinstance（）和issubclass（）：
+'''
+class father():
+    pass
+class son(father):
+    pass
+Ben=son()
+Sally=father()
+print(isinstance(Ben,father))  #true，说明了继承了父类的子类也拥有父类的类型
+print(isinstance(Sally,father))   #true
+print(isinstance(Sally,son))    #False,父类没有子类的类型
+print(isinstance(Ben,son))      #true
+print(issubclass(son,father))   #true
+'''
+
+#多态
+'''
+class Person(object):
+      def __init__(self,name,sex):
+          self.name = name
+          self.sex = sex
+      def print_title(self):
+          if self.sex == "male":
+              print("M")
+          elif self.sex == "female":
+              print("F")
+
+
+class Child(Person):                # Child 继承 Person
+     def print_title(self):
+         if self.sex == "male":
+             print("boy")
+         elif self.sex == "female":
+             print("girl")
+
+Peter= Child("Peter","male")
+May = Person("May","female")
+
+print(May.name,May.sex,Peter.name,Peter.sex)
+May.print_title()     #输出girl
+Peter.print_title()   #输出M
+'''
+#在这个case中可以很清楚地看到，父类Person和子类Child都拥有print_title()的功能
+#在May（Person类的对象）使用print_title方法的时候调用的是Person类中的方法
+#而Peter(Child类的对象）则调用了自己的print_title方法
+
+#多态在此得到体现，当写Person的子类时（Child，Teenager，Grownup等）的时候，可以直接调用Person中的方法（如方法A）。而如果我们想在子类中对Person中的方法进行修改or扩展时，便可以在子类中重写这个方法（将方法A改写成子类的方法A1）
+#在使用子类时，系统会读取子类中的方法A1而不是Person中的方法A。如子类中没写方法A，系统则读取Person中的方法A
+#这叫做多态
+
+
+#子类重写构造函数
+'''
+class Person(object):
+    def __init__(self,name,sex):
+        self.name=name
+        self.sex=sex
+
+class Child(Person):
+    def __init__(self,name,sex,father,mother):
+        Person.__init__(self,name,sex)   #子类对父类构造方法的调用，用于减少冗余代码
+        self.mother=mother               #意为向Person类中增加属性
+        self.father=father
+May=Child("May","male","Keen","Alice")
+print(May.name,May.sex,May.father,May.mother)
+
+#输出 May male Keen Alice
+'''
+#子类重写构造函数的效果等于：
+'''
+class Person(object):
+  def __init__(self,name,sex,father,mother):
+       self.name=name
+       self.sex=sex
+       self.father=father
+       self.mother=mother
+
+May=Person("May","Female","John","Marry")
+print(May.name,May.sex,May.father,May.mother)
+'''
+#在多重继承中，如Person-Child-Baby这样的层级中，最低层类Baby可以继承Person的属性和方法
+#如产生多态时，Baby也会优先使用Child类中的方法
+
+'''
+#封装
+#实例化的含义是：实例化是指在面向对象的编程中，通常把用类创建对象的过程称为实例化。格式化有类名，对象名 = new 类名（参数1，参数2...参数n）。
+#封装的意义是就是将类或者是函数中的某些属性限制在某个区域之内，外部无法调用。而外部调用的只能是类提供的某个接口
+#封装中以__x（左双下划线）表示封装，x为数据或者属性。只有类内部能访问
+#如：
+class Person:                            #类的定义
+    def __init__(self,name,sex):          #属性由name和sex
+        self.name=name
+        self.sex=sex
+    def __output(self):                  #被封装的output函数，只能在类的里面访问
+        if self.name=='Mary'and self.sex=='Female':     #私有化函数的功能被封装
+            return 1
+    def output1(self):
+        if self.__output()==1:             #调用被封装的函数
+            print("Mary is Female")
+Mary=Person('Mary','Female')
+#Mary.__output()                #会报错AttributeError: 'Person' object has no attribute '__output'
+Mary.output1()                  #输出Mary is Female
+'''
