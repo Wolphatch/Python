@@ -33,15 +33,24 @@ def newton_method():
     elif B==0:
         print("0")
     else:
-      i=1
-      for j in range(1,10,1):
-         temp=i-(i**K-B)/(K*i)
+      i=1               #初始迭代点
+      for j in range(1,10,1):  #运行十次
+         temp=i-(i**K-B)/(K*i)   #使用牛顿迭代法求X^n=B,即X为B的n次方根
          i=temp
          print(i)
 newton_method()
 
 
 https://www.guokr.com/question/461510/ 有牛顿迭代法的数学解释
+
+--->f(x)=x^n-a
+--->f'(x)=nx^(n-1)    #函数在某点的导数等于其切线的斜率
+已知切线公式：y-y1=a(x-x1)
+切线过xn,f(xn)
+--->y-f(xn)=nx^(n-1)*(x-xn)
+要求x(n+1)就必须使得y=0
+--->-f(xn)=nx^(n-1)*(x(n+1)-xn)
+--->Xn+1=Xn-(Xn-a)/n*Xn^(n-1)
 
 
 
