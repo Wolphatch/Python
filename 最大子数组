@@ -17,7 +17,7 @@ for i in range(0,n):
              x=i
              y=j
           print(i,j,cur_sum)
-print(x,y,max)
+print(x,y-1,max)
 
 
 分治法：
