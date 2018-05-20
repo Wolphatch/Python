@@ -1,0 +1,89 @@
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+
+'''
+#import data with numpy
+
+#E.g 1
+#使用seaslug.txt
+# Assign filename: file
+file = 'seaslug.txt'
+
+#因为首行为str，其余为float，直接load会报错
+
+# 第一种解决方法，将数据全部转变为str
+data = np.loadtxt(file, delimiter='\t', dtype=str)
+
+
+#第二种，跳过第一行
+# Import data as floats and skip the first row: data_float
+data_float = np.loadtxt(file, delimiter='\t', dtype=float, skiprows=1,usecols=[0,1])
+print(data)
+#arguments：分隔符('\t'或',')，跳过几行，使用哪几行，使用什么数据格式
+#打印后发现是[['Time' 'Percent']['99' '0.067']['99' '0.133']['99' '0.067']]形式的表
+
+
+# Plot a scatterplot of the data
+plt.scatter(data_float[:, 0], data_float[:, 1])
+plt.xlabel('time (min.)')
+plt.ylabel('percentage of larvae')
+plt.show()
+'''
+
+
+'''
+#E.g 2
+#依旧使用seaslug
+#name=True tells us there is a header（Firsr line)
+data1=np.genfromtxt(file,delimiter='\t',names=True,missing_values=0,dtype=None)
+
+#打印一下，看genfromtxt的样子，发现是一个[(a,b) (c,d)...]样式的列表
+print(data1)
+'''
+
+'''
+#E.g 3
+#读取csv文件可以用recfromcsv(),效果和genfromtxt类似
+d=np.recfromcsv(file,delimiter=',',names=True,dtype=None)
+'''
+
+
+
+
+
+
+
+#Using Pandas to import data
+
+#E.g 1
+'''
+# Assign the filename: file
+file = 'titanic.csv'
+
+# Read the file into a DataFrame: df
+df = pd.read_csv(file)
+
+# View the head of the DataFrame
+print(df.head())
+'''
+
+
+#E.g2
+#使用pandas读取csv，并转变为DataFrame,使用matplotlib作图
+# Assign the filename: file
+file = 'titanic.csv'
+
+# Read the first 5 rows of the file into a DataFrame: data
+data=pd.read_csv(file,nrows=200)
+
+# Build a numpy array from the DataFrame: data_array
+#使用data.values表示去掉行标题
+data_array=np.array(data.values)
+
+# Print the datatype of data_array to the shell
+print(data)
+
+pd.DataFrame.hist(data[['Age']])
+plt.show()
