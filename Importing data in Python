@@ -67,7 +67,7 @@ df = pd.read_csv(file)
 
 # View the head of the DataFrame
 print(df.head())
-'''
+
 
 
 #E.g2
@@ -87,3 +87,77 @@ print(data)
 
 pd.DataFrame.hist(data[['Age']])
 plt.show()
+
+
+
+
+#import pickled files
+#pickled文件一般都是被序列化的，即将objects转化为bytestream
+#很多时候许多数据格式不知道如何存储，就可以转化为pickle file储存）
+
+#import pickle
+import pickle
+
+
+#写一个简单的学生类用来存储
+class student(object):
+   def  __init__(self,stuname,stulesson,stuno):
+          self.name=stuname
+          self.lesson=stulesson
+          self.no=stuno
+
+   def __repr__(self):   #类用来返回的函数
+          return 'Student:Name:%s,Lesson:%s,No:%s'%(self.name,self.lesson,self.no)
+
+#将类实例化
+Marry=student('Marry','Data Mining','01')
+Candy=student('Candy','Data Mining','02')
+
+#创建一个叫做Student的pickle文件，pickle为二进制文件，需用wb+
+file=open('Student.pkl', 'wb+')
+
+#将实例写入
+pickle.dump(Marry,file)
+pickle.dump(Candy,file)
+
+#在Python中读取（pickle的读取有迭代属性，会一个一个读）
+file=open('Student.pkl', 'wb+')
+data=pickle.load(file)
+print(data)
+data=pickle.load(file)  #读第二次
+print(data)
+
+
+
+
+
+
+#使用pandas读取excel
+#这里以一个股票在2017年的股价为例
+
+#读取
+file=pd.ExcelFile('sh600009.xlsx')
+
+#读取excel里sheet名
+sheetname=file.sheet_names
+print(sheetname)     #['sh600009', 'Sheet1']
+
+#对sheet的操作
+#按照sheet名读取
+df=file.parse('sh600009')
+
+#按照sheet顺序读取
+df1=file.parse(0)
+
+#打印表头，即数据的index
+print(df.keys())
+
+#个性化读取
+#usecols：想要用的列，需要[]。skiprows：跳过第几行。names：重命名index的名字
+df2=file.parse(0,usecols=[1],skiprows=1,names=['Date'])
+print(df2)
+
+
+
+
+
