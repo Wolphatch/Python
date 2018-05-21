@@ -1,0 +1,105 @@
+#类的成员是字段、方法和属性
+#普通字段属于对象（实例变量），静态字段属于类（类变量）
+#普通字段储存在实例的内存中，每个实例都会有一份，静态字段储存在类类的内存中，只会有一份
+#
+
+
+
+# 1、@classmethon
+
+'''
+class animal:
+    type='true'
+    def __init__(self,name):
+        self.name=name
+    #@classmethod
+    def talk(self):
+        print('%s is animal'%self.name)
+
+d=animal('cat')
+d.talk()
+'''
+#没有@classmethod，输出：cat is talking
+#有classmethod，报错： type object 'animal' has no attribute 'name'
+#之所以变成这样，是因为在@classmethod后，talk被变成了类方法，而不是实例方法
+#类的内存里没有name属性，所以会报错
+#此时talk作为类方法只能访问类变量：
+#类方法
+#类方法将类本身作为对象，类似于将类实例化。需要@classmothod装饰器
+#类对象（如类自身：Role）和实例（t1)都可以调用类方法
+'''
+class Role(object):   #d定义角色类
+    sc='AA'
+    def __init__(foo, name, role, weapon, life_value): #角色有名字，角色，武器，生命值四个属性
+       foo.name = name
+       foo.role = role
+       foo.weapon = weapon
+       foo.life_val = life_value
+    @classmethod
+    def hi(cls,x):
+        print(cls.sc*x)    #操作类，类的属性等，cls指代类
+t1=Role('T1','p','AA',100)  #实例化
+t1.hi(2)   #AAAA    #在这里实例调用了类方法，这在其他很多语言不允许
+Role.hi(3)  #AAAAAA
+
+'''
+
+
+
+
+
+# 2、@staticmothod
+#静态方法是一种普通函数，不会对任何实例类型进行操作。使用@装饰器定义静态方法。
+#类对象（如类自身：Role）和实例（t1)都可以调用静态方法
+'''
+class animal:
+    def __init__(self,name):
+      self.name=name
+    a=1
+    @staticmethod
+    def talk(a):
+        print('I am static method talk %s'%a)
+cat=animal('lucy')
+cat.talk('a')   #只有python允许实例访问静态方法
+animal.talk('a') 
+
+#输出：I am static method talk a
+#     I am static method talk a
+#静态方法是类的一种工具箱，不能访问实例变量和类变量，就是一个函数。
+'''
+
+
+
+
+
+
+
+
+
+#3、@property, 以及scatter
+'''
+
+class animal:
+    def __init__(self,name):
+      self.name=name
+    a=1
+    @property
+    def talk(self):
+        print('I am static method talk %s'%self.name)
+        return 'I am static method talk %s'%self.name
+    @talk.setter
+    def talk(self,num):
+        print('As a scatter l received a number %s'%num)
+cat=animal('lucy')
+#cat.talk('a')   #输出'NoneType' object is not callable
+#animal.talk('a') #输出'property' object is not callable
+#cat.talk  #输出I am static method talk lucy
+#@property将方法变成了一种属性，实例调用此方法不需要括号
+
+
+cat.talk=4   #输出:As a scatter l received a number 4
+#如果你想对一个已经@property的函数传值，可以同@(函数名）.scatter的方法。使用方法如上
+#cat.talk=4等同于talk(4)
+'''
+
+
