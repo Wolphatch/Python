@@ -100,7 +100,7 @@ x = mu + sigma * np.random.randn(10000)
 #创建画板1（fighre（1）），并在画板使用.add_subplot()创建画纸1
 #还有另一种方法叫做.add_axes().ref：https://www.zhihu.com/question/51745620
 fig=plt.figure(1)
-ax1=fig.add_subplot(2,1,1)
+ax1=fig.add_subplot(2,1,1)     #两行一列第一个位置（行数、列数、图的位置）
 
 #为x,y轴命名，添加title
 plt.xlabel('Distribution')
@@ -134,7 +134,7 @@ ax2=plt.figure(2)
 plt.plot(t,s)
 
 #x,y轴的范围，定制坐标轴
-plt.axis=plt.axis([0, 1, 1.1*np.amin(s), 2*np.amax(s)])
+plt.axis=plt.axis([0, 1, 1.1*np.amin(s), 2*np.amax(s)])   #括号里面的值前两个是轴域原点坐标（从左下角计算的），后两个是显示坐标轴的长度
 
 #为x,y轴命名，添加title
 plt.xlabel('time (s)')
