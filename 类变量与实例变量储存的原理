@@ -1,0 +1,134 @@
+'''
+class role(object):   #d定义角色类
+    def __init__(self, name, role, weapon, life_value): #角色有名字，角色，武器，生命值四个属性
+        self.name = name
+        self.role = role
+        self.weapon = weapon
+        self.life_val = life_value
+
+    def buy_weapon(self, weapon):
+        print("{0} is buying {1}".format(self.name, self.weapon))
+        self.weapon=weapon
+
+Tom = role("TOM", 'Police', "AK", 100)  #相当于role(Tom,"TOM", 'Police', "AK", 100),Tom是-->role的实例对象，role是一个抽象的类，被变成了具体的对象Tom,过程叫实例化。实例即self
+print(Tom.weapon)
+Tom.buy_weapon('M1A6')  #内部转换成Role.buy_weapon("Tom","M6A1")
+print(Tom.weapon)
+
+#输出：
+#AK
+#TOM is buying AK    #使用Tom.buy_weapon('M1A6')命令后，self.weapon被重新定义为M1A6
+#M1A6
+'''
+'''
+#除了函数以外，类的属性也可以直接写：
+class role(object):   #d定义角色类
+    ac=0
+    def __init__(self, name, role, weapon, life_value): #角色有名字，角色，武器，生命值四个属性
+        self.name = name
+        self.role = role
+        self.weapon = weapon
+        self.life_val = life_value
+Tom=role("TOM","PL","AK","100")
+print(Tom.ac)       #输出0
+Tom.ac=1           
+print(Tom.ac)      #输出1
+role.ac=3         #将类属性改变
+Alice=role("ALICE","PL","AK","100")  #创建第二个实例Alice
+print(Tom.ac)     #输出1
+print(Alice.ac)   #输出3         #在改变类的属性后，Tom和Alice的ac不一致
+
+
+#可以看到，在role.ac=3这个命令之前，实例Tom的变量ac=1，且之后再命名role这个类的ac属性=3的时候，实例Tom的ac还是1
+#但是在role.ac=3这个命令之后的实例Alice的ac变量却变为了3
+
+'''
+'''
+class role(object):   #d定义角色类
+    ac=0
+    def __init__(self, name, role, weapon, life_value): #角色有名字，角色，武器，生命值四个属性
+        self.name = name
+        self.role = role
+        self.weapon = weapon
+        self.life_val = life_value
+t1=role('t1','p','AA',100)
+role.ac=3
+role.weapon='BB'
+t2=role('t2','p','AB',100)
+print(t1.ac)
+print(t2.ac)
+print(t1.weapon)
+print(t2.weapon)
+
+#输出：
+#3
+#3
+#AA
+#AB
+
+#可以看到，在没有声明t1.ac=1的时候，直接声明将类变量ac改编为3，t1.ac输出也是3，不像上一个例子中，ac在tom.ac=1这条声明之后输出为1
+#而同时，初始化方法内的属性weapon，即使声明了他等于BB之后，不管是之前的t1,还是之后的t2在输出的时候，weapon属性均为实例化时输入的值，未改变为BB
+#原因如下：
+
+#首先，在将role存入内存后，运行print(role.ac),会输出0，而运行print(role.weapon)会报错（no attribute)
+#ac作为role的一部分，在将role这个类存入内存时也储存了ac。ac被储存在role的内存空间里
+# 而weapon属性则是在类role实例化（即执行__init__函数）的时候才会出现，init函数的属性（weapon，name等）都存储在实例化对象的内存空间里
+#所以任何对role类的ac的改变都会使其变化，而weapon不行。但是！！！role.weapon=“BB”这个命令是起作用的，作用是在role这个类里面增加了一个名为weapon变量，变成和ac一回事的东西了
+
+print(role.weapon)   #输出BB，变为了类变量
+
+#所以！！ac被称为类属性or类变量，储存在类的内存空间。，__init__中的weapon，name等属性被称为成员属性or成员变量，在实例化后存在实例的内存空间
+#同时，在上例中，在声明Tom.ac=1后！输出Tom.ac=1。这里ac访问的不是类储存空间里的ac，而是在Tom的实例空间里创建了一个属性叫做ac
+#类似于变成了__init__(self,name,role,weapon,life_value,ac)
+'''
+
+
+
+#类变量的使用
+'''
+class Role(object):   #d定义角色类
+    menbers=0
+    def __init__(self, name, role, weapon, life_value): #角色有名字，角色，武器，生命值四个属性
+        self.name = name
+        self.role = role
+        self.weapon = weapon
+        self.life_val = life_value
+        Role.menbers += 1
+t1=Role('t1','p','AA',100)
+t2=Role('t2','p','AA',100)
+t3=Role('t3','p','AA',100)
+print(Role.menbers)
+'''
+#实例每次初始化都会调用__init__函数，而menbers存储在Role类的内存空间
+#所以每实例化一次，Role.menbers += 1都会被执行一次
+
+
+#类的方法调用问题：
+'''
+def buy_weapon(self, weapon):
+    print("{0} is buying {1}".format(self.name, self.weapon))
+    self.weapon = weapon
+'''
+#为什么要写self.weapon=weapon？
+#类的方法存在类的内存空间，实例用self.weapon访问buy_weapon函数
+#拥有self的是““实例方法””，实例能够调用实例方法，如上
+#self也可以写其他的
+'''
+class Role(object):   #d定义角色类
+    def __init__(foo, name, role, weapon, life_value): #角色有名字，角色，武器，生命值四个属性
+       foo.name = name
+       foo.role = role
+       foo.weapon = weapon
+       foo.life_val = life_value
+    def hi(here):        #self只是一种约定俗成的写法，括号里写here等任何东西都行，代表的是实例对象
+        print(here.name)
+t1=Role('T1','p','AA',100)
+t1.hi()    #输出T1
+'''
+
+
+
+
+
+
+
