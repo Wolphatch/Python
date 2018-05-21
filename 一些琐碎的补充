@@ -1,0 +1,393 @@
+'''
+class Schoolmenbers():
+    def __init__(self,name,age,sex):
+        self.name=name
+        self.sex=sex
+        self.age=age
+    def enroll(self):
+        print("SchoolMenber {0} is enrolled".format(self.name))
+
+class Teachers(Schoolmenbers):
+
+    def __init__(self,name,age,sex,courses):
+        super().__init__(name,age,sex)  #减少冗余代码，即self.name=name等,但和网上教程不一样的是，__init__()的括号中不能放self，很迷
+        self.courses=courses
+        #SchoolMenbers.__init__(self,name,age,sex)  #经典写法，推荐用super
+
+    def teach(self):
+        print("Teacher {0}is teaching{1}".format(self.name,self.courses))
+
+class Students(Schoolmenbers):
+
+    def __init__(self,name,age,sex,tuition):
+        super().__init__(name,age,sex) #Python 2中super后面的括号需要加类名和self，3中不用，直接super（）
+        self.tuition=tuition
+
+    def learning(self):
+        print('Student {0} has paid {1} for tuition'.format(self.name,self.tuition))
+
+Tom=Teachers('Tom',8,'male','math')
+Sally=Students('Sally','16','female','2000')
+Tom.teach()
+Sally.learning()
+
+#super用于执行父类中的函数
+
+
+
+class Role(object):   #d定义角色类
+    def __init__(foo, name, role, weapon, life_value): #角色有名字，角色，武器，生命值四个属性
+       foo.name = name
+       foo.role = role
+       foo.weapon = weapon
+       foo.life_val = life_value
+    def hi(self):
+        print(self.name)
+class Role2(Role):
+    def hi(self):
+        super(Role2,self).hi()
+t1=Role2('T1','p','AA',100)
+t1.hi()   #输出T1,这是Role中的方法，但是通过super可以被Role2的实例调用
+
+#实例变量为self.开头，储存在实例的内存空间。类变量在类中，储存在类的内存
+#实例可以访问类变量
+
+'''
+
+
+
+
+
+
+
+
+
+#调用父类方法，但实例对象还是子类的
+'''
+class A:
+    def __init__(self):
+        self.n = 2
+
+    def add(self, m):
+        print('self is {0} @A.add'.format(self))
+        self.n += m
+
+
+class B(A):
+    def __init__(self):
+        self.n = 3
+    
+    def add(self, m):
+        print('self is {0} @B.add'.format(self))
+        super().add(m)  #调用父类的add方法，此时self.n=3,函数完成后self.n=2+3
+        self.n += 3
+
+
+b = B()
+b.add(2)
+print(b.n)
+
+
+#输出：
+#self is <__main__.B object at 0x7f22020fad68> @B.add
+#self is <__main__.B object at 0x7f22020fad68> @A.add
+#8
+
+#1、super().add(m) 确实调用了父类 A 的 add 方法。
+#2、super().add(m) 调用父类方法 def add(self, m) 时, 
+#此时父类中 self 并不是父类的实例而是子类的实例, 所以 b.add(2) 之后的结果是 5 而不是 4 。
+
+'''
+
+
+
+
+
+
+
+
+
+
+#多继承中super方法的顺序问题
+'''
+class A:
+    def __init__(self):
+        self.n = 2
+
+    def add(self, m):
+        print('self is {0} @A.add'.format(self))
+        self.n += m   #4、 2+5=7
+
+
+class B(A):
+    def __init__(self):
+        self.n = 3
+
+    def add(self, m):
+        print('self is {0} @B.add'.format(self))
+        super().add(m)  #2、接着调用C类的add方法,返回#5的11
+        self.n+=m       #6、 11+2=13
+
+class C(A):
+    def __init__(self):
+        self.n=4
+    def add(self, m):
+        print("self is {} @C.add".format(self))
+        super().add(m)  #3、接着调用A类的add方法，返回7
+        self.n+=4       #5、 7+4=11
+
+class D(B,C):
+    def __init__(self):
+        self.n=5
+
+    def add(self, m):
+        print("self is {} @D.add".format(self))
+        super().add(m) #1、根据super类的mro方法，调用父类B的add方法
+        self.n+=5      #7 13+5=18
+
+
+d = D()
+d.add(2)
+print(d.n)
+print(D.mro())
+
+#输出
+#self is <__main__.D object at 0x7fa0506ee0b8> @D.add
+#self is <__main__.D object at 0x7fa0506ee0b8> @B.add
+#self is <__main__.D object at 0x7fa0506ee0b8> @C.add
+#self is <__main__.D object at 0x7fa0506ee0b8> @A.add
+#18
+#[<class '__main__.D'>, <class '__main__.B'>, <class '__main__.C'>, <class '__main__.A'>, <class 'object'>]
+
+#super是一个类，调用super就是把类实例化的过程。
+#super中有一个mro方法，从中可以看到D类使用super调用的父类方法的顺序，即[D,B,C,A]
+#再一种情况,如果孙类D在super()中继承的方法存在于类A中，而不存在与类B、C中，会直接继承A中的方法
+
+
+#子类调用父类方法可以用super().父类函数（）
+#子类调用父类属性以减少冗余代码可以用super().__init__(父类属性，不需要self）
+'''
+
+#如父类调用子类的方法可以
+'''
+class animal:
+    def __init__(self,name):
+        self.name=name
+
+    def talk(self):
+        print('here is an animal')
+
+class cat(animal):
+    def __init__(self,name):
+        self.name=name
+        self.properity='cat'
+    def talk(self):
+        return self.properity
+
+class dog(animal):
+    def __init__(self,name):
+        self.name=name
+        self.properity='dog'
+    def talk(self):
+        return self.properity
+
+animals=[cat('Lucy'),dog('alina')]
+
+for animal in animals:
+    print(animal.name,':',animal.talk())
+
+#输出：
+#Lucy : cat
+#alina : dog
+
+'''
+
+
+
+
+#__doc__
+'''
+class animal:
+    that is a class
+    def __init__(self,name):
+        self.name=name
+
+    def talk(self):
+        print('here is an animal')
+
+
+print(animal.__doc__)  #打印类的注释    #输出that is a class
+
+'''
+
+
+#__module__
+'''
+class animal:
+
+    def __init__(self,name):
+        self.name=name
+
+    def talk(self):
+        print('here is an animal')
+
+d=animal('Lucy')
+print(d.__module__)
+'''                                #输出__main__意味着这个对象的类来自于‘一些琐碎的补充’这个模块本身
+'''
+from module import animal          #另一个叫做module的模块里有一个叫做animal的类
+
+d=animal('Lucy')
+print(d.__module__)               #输出：module ，这个对象的方法来自于module模块
+'''
+
+
+#__del__
+'''
+class animal:
+
+    def __init__(self,name):
+        self.name=name
+
+    def talk(self):
+        print('here is an animal')
+    def __del__(self):
+        print('deleting...')
+
+d=animal('Lucy')
+d.talk()
+print('123')
+
+
+#输出：here is an animal
+#     123
+#     deleting...
+#__del__用于在程序结束后删除对象，在程序运行结束后自动运行,但是删除什么需要自己在函数中写
+'''
+
+
+#__call__
+'''
+class foo:
+
+    def __init__(self):
+        print('__init__')
+
+    def __call__(self):
+        print('__call__')
+
+d=foo() #对象的实例化会触发类的__init__方法
+d()     #对象后面加括号会触发类中的__call__方法
+'''
+
+
+
+
+#__dict__
+'''
+class foo:
+    def __init__(self,name,sex,age):
+        print('__init__')
+        self.a=1
+        self.b=2
+        self.c=3
+        self.name=name
+        self.sex=sex
+        self.age=age
+    def talk(self):
+        print('1')
+
+d=foo('Lucy','m',12)
+print(d.__dict__)
+
+#输出：{'b': 2, 'name': 'Lucy', 'c': 3, 'age': 12, 'a': 1, 'sex': 'm'}  #__dict__将类属性用字典的方式输出
+'''
+
+
+
+#__str__
+'''
+class foo:
+    def __init__(self,name,sex,age):
+        print('__init__')
+        self.a=1
+        self.b=2
+        self.c=3
+        self.name=name
+        self.sex=sex
+        self.age=age
+    def talk(self):
+        print('1')
+
+    def __str__(self):
+        return '__str__'
+d=foo('Lucy','m',12)
+print(d)   #输出__str__
+'''
+
+
+
+#创建类的简易写法(不太用得到）
+
+'''
+class foo:
+    def __init__(self):
+        print('__init__')
+
+    def talk(self):
+        print('1')
+
+
+MyShinyClass=type('MyShinyClass',(foo,),{'test':123,'name':'Lucy'}) #简易写法
+
+
+a=MyShinyClass()
+print(a.test)      #大括号里填写的字典为类的类变量
+a.talk()           #括号里填写的是类的夫类，是一种继承的简写
+'''
+
+
+
+
+
+
+#从其他模块import类，并继承类变量和实例变量
+'''
+import module     #在当前目录下有一个module模块，import
+
+class foo(module.animal):   #继承module模块下的animal类
+    name=module.animal.name_    #animal类下有类变量name_
+    age=module.animal.sex_      
+    str=module.animal.tell()    #父类函数的返回值
+    def __init__(self,name,age,sex):
+        super().__init__(name,age)
+        self.sex=sex
+
+dog=foo("Lucy",12,'M')
+
+print(dog.talk())
+print(dog.name_)   #父类的类变量
+print(dog.str)    #父类函数的返回值
+
+'''
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
