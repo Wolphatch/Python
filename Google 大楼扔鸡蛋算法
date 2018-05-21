@@ -12,6 +12,7 @@
 #在最好情况下，蛋一直没碎，最后一次就从X+（X-1）+（X-2）.....+1=(X^2+X)/2层
 #已知有100层，则(X^2+X)/2>=100，X=14
 
+#一幢 100 层的大楼，给你2枚鸡蛋。假设，在第X层扔下鸡蛋，问最少多少次能测出鸡蛋扔下去不碎的楼层
 
 #动态回归法
 import functools
@@ -21,10 +22,11 @@ def f(n, m):
         return 0
     if m == 1:
         return n
-
-    ans = min([max([f(i - 1, m - 1), f(n - i, m)]) for i in range(1, n + 1)]) + 1
-    print(ans)
-    return ans
+        
+    for i in range(1, n + 1)：     #i代表寻找一个分界层
+        ans = min([max([f(i - 1, m - 1), f(n - i, m)])  + 1   #在分阶层i扔一次，碎了损失一枚蛋m-1，问题简化为1层至i-1层。没碎问题简化为n-i层至n层
+        print(ans)
+        return ans
 
 
 print(f(100, 2))
