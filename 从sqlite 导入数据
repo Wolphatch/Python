@@ -2,17 +2,16 @@
 #来源于这个项目https://github.com/lerocha/chinook-database.git
 #sqlite版本在:ChinookDatabase\\DataSources\\Chinook_Sqlite.sqlite
 
-
-
-
-#1、
-#[in]:
 #import操控数据库的模块
 from sqlalchemy import create_engine
 
 #创建引擎，sqlite是操控此类数据库的tool，文件名是Chinook.sqlite
 engine=create_engine('sqlite:///Chinook.sqlite')
 
+
+
+#1、基础操作
+'''
 #打印这个关系库中的表名
 table_names=engine.table_names()
 
@@ -21,12 +20,88 @@ print(table_names)
 #[output]:
 #['Album', 'Artist', 'Customer', 'Employee', 'Genre', 'Invoice', 'InvoiceLine', 'MediaType', 'Playlist', 'PlaylistTrack', 'Track']
 
+#连接数据库
+con=engine.connect()
+
+#执行操作（从album选取所有的列）
+rs=con.execute('SELECT * FROM Album')
+
+#从Customer选取第一列
+rs1=con.execute('SELECT 1 FROM Customer')
+
+#将数据导入pandas，形成DataFrame
+df=pd.DataFrame(rs.fetchall())
+df2=pd.DataFrame(rs1.fetchall())
+#关闭连接
+con.close()
+
+#打印df,df2
+print(df)  #打印了整个表
+print(df2) #打印了Customer的第一列
+'''
 
 
 
+#2、个性化
+#create engine
+engine=create_engine('sqlite:///Chinook.sqlite')
+
+#connect
+con=engine.connect()
 
 
+# Perform query and save results to DataFrame: df
+rs = con.execute('SELECT LastName,Title FROM Employee')
+df = pd.DataFrame(rs.fetchmany(3))   #fetchmany(3)只取三行数据，并pd.DataFrame
+df.columns =['LastName','Title']  #将两列column命名
 
+# Print the length of the DataFrame df
+print(len(df))  #1
+
+# Print the head of the DataFrame df
+print(df)  
+
+#   LastName                Title
+# 0    Adams      General Manager
+# 1  Edwards        Sales Manager
+# 2  Peacock  Sales Support Agent
+
+
+#3、筛选、排序操作（WHERE，ORDER BY）
+'''
+# Create engine: engine
+#engine = create_engine('sqlite:///Chinook.sqlite')
+
+# Open engine in context manager
+# Perform query and save results to DataFrame: df
+with engine.connect() as con:
+    rs = con.execute('SELECT * FROM Employee WHERE EmployeeId>=6')
+    
+    df = pd.DataFrame(rs.fetchall())
+    
+    df.columns = rs.keys()    #df的列标题为rs的key()
+    
+# Print the head of the DataFrame df
+print(df.head())
+con.close()
+#输出为EmployeeId>=6的结果，并有对应列标题
+'''
+
+'''
+# Create engine: engine
+engine = create_engine('sqlite:///Chinook.sqlite')
+
+# Open engine in context manager
+with engine.connect() as con:
+    rs = con.execute('SELECT * FROM Employee ORDER BY BirthDate')
+    df = pd.DataFrame(rs.fetchall())
+
+    # Set the DataFrame's column names
+    df.columns=rs.keys()
+
+# Print head of DataFrame
+print(df.head())
+'''
 
 
 
