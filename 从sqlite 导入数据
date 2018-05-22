@@ -1,0 +1,36 @@
+#使用Chinook.sqlite
+#来源于这个项目https://github.com/lerocha/chinook-database.git
+#sqlite版本在:ChinookDatabase\\DataSources\\Chinook_Sqlite.sqlite
+
+
+
+
+#1、
+#[in]:
+#import操控数据库的模块
+from sqlalchemy import create_engine
+
+#创建引擎，sqlite是操控此类数据库的tool，文件名是Chinook.sqlite
+engine=create_engine('sqlite:///Chinook.sqlite')
+
+#打印这个关系库中的表名
+table_names=engine.table_names()
+
+print(table_names)
+
+#[output]:
+#['Album', 'Artist', 'Customer', 'Employee', 'Genre', 'Invoice', 'InvoiceLine', 'MediaType', 'Playlist', 'PlaylistTrack', 'Track']
+
+
+
+
+
+
+
+
+
+
+
+
+
+
