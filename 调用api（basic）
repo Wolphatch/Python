@@ -1,0 +1,88 @@
+#以http://www.omdbapi.com/为例
+#在网站上申请api后会得到key
+
+#my key: abb2ffe
+
+#eg:OMDb API: http://www.omdbapi.com/?i=tt3896198&apikey=abb2ffe
+
+import requests
+import pickle
+
+#1、基础操作
+'''
+#write url according to the example given by API website,and dont forget the key
+#search by id
+url='http://www.omdbapi.com/?i=tt3896198&apikey=abb2ffe'
+
+#search by name
+url1='http://www.omdbapi.com/?t=Guardians+of+the+Galaxy+Vol.+2&apikey=abb2ffe'
+
+# get response
+r=requests.get(url)
+r1=requests.get(url1)
+
+#print response
+dic=r.text
+dic1=r1.text
+print(dic)
+print(dic1)
+'''
+
+
+
+
+#2
+'''
+#通过ID扫描抓取数据
+#建立IDlist，用于组合ID
+IDlist=['tt3896198']
+for i in range(1,5):
+    ID=3896198
+    idnew=ID+i
+    idnew=str(idnew)
+    IDnew='{0}{1}'.format('tt',idnew)
+    IDlist.append(IDnew)
+
+#将ID与URL组合成URLlist
+URLlist=[]
+for i in IDlist:
+    URLlist.append('{0}{1}{2}'.format('http://www.omdbapi.com/?i=',i,'&apikey=abb2ffe'))
+
+#请求并写入pickle文件
+file=open('omdb.pkl','wb+')
+for i in URLlist:
+    r=requests.get(i)
+    omdb_data=r.text
+    pickle.dump(omdb_data,file)
+'''
+
+
+
+#3调用维基百科的api
+'''
+# Import package
+import requests
+
+# Assign URL to variable: url
+url='https://en.wikipedia.org/w/api.php?action=query&prop=extracts&format=json&exintro=&titles=pizza'
+
+# Package the request, send the request and catch the response: r
+r = requests.get(url)
+
+# Decode the JSON data into a dictionary: json_data
+json_data=r.json()
+
+# Print the Wikipedia page extract
+pizza_extract = json_data['query']['pages']['24768']['extract']
+print(pizza_extract)
+'''
+
+
+
+
+
+
+
+
+
+
