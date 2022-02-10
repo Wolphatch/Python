@@ -27,29 +27,32 @@ print(x,y,max)
 
 分治法：O（nlogn)
 
+def solution(fro, to, arr):
+    if fro == to:
+        return arr[fro]
+    middle = (fro+to)//2
+    left = solution(fro, middle, arr)
+    right = solution(middle+1, to, arr)
+    left_max = -12535
+    now = 0
+    for i in range(middle,fro-1,-1):
+        now+=arr[i]
+        left_max = max(now,left_max)
+    
 
-def maxaddsub(fro,to,a):
-    if to==fro:                    #终点条件为，如果from 与 to相等，输出array[from]
-        return a[fro]
-    middle=(fro+to)//2             #将数组一分为三（左边，中间分界线的地方一个数，右边）
-    m1=maxaddsub(fro,middle,a)     #问题简化为求左边的最大子数组
-    m2=maxaddsub(middle+1,to,a)    #问题简化为求右边的最大子数组
-    left=a[middle]                 #现在开始求包含中间分界数的最大子数组
-    now=a[middle]                  #先求紧靠中间包含分界数左边的最大子数组 
-    for i in range(middle,fro,-1):     #循环，类似暴力法，列举从中间数左边第一个的和，到中间数左边所有数的和，取最大值
-        now+=a[i]
-        left=max(now,left)
-    right=a[middle+1]              #然后求紧靠中间分界数右边的最大子数组
-    now=a[middle+1]
-    for i in range(middle+1,to,1):  #循环，类似暴力法，列举从不包含中间数的右边第一个的和，到中间数右边所有数的和，取最大值 
-        now+=a[i]
-        right=max(now,right)     
-    m3=left+right                      
-    return max(m1,m2,m3)
+    right_max = -12535
+    now = 0
+    for j in range(middle+1,to,1):
+        now+=arr[j]
+        right_max = max(now,right_max)
+        
+    mid = left_max+right_max
 
+    print(f'''{left},{right},{mid}''')
 
-b=maxaddsub(0,len(array)-1,array)
-print(b)
+    return max(left,right,mid)
+          
+print(solution(0,len(array)-1,array))
 
 
 
